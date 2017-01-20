@@ -39,7 +39,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             templateUrl: 'templates/about/about.html'
           }
         }
-      });
+      })
+
+    .state('app.test', {
+      url: '/test',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/test/test.html',
+          controller: 'TestController'
+        }
+      }
+    });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/about');
   });
