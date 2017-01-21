@@ -1,6 +1,18 @@
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+  .controller('AppCtrl', function ( $rootScope,
+                                    $scope,
+                                    $ionicModal,
+                                    $timeout,
+                                    $auth,
+                                    $ionicLoading) {
+
+    // Create a current user
+    $rootScope.$on('auth:login-success', function(ev, user) {
+      $scope.currentUser = user;
+    });
+
+    // Form data for the login modal
     $scope.loginData = {};
 
     // Create the login modal that we will use later
@@ -21,8 +33,22 @@ angular.module('starter.controllers', [])
     };
 
     // Perform the login action when the user submits the login form
-    $scope.doLogin = function() {
-      console.log('Doing login', $scope.loginData);
+    $scope.doLogin = function () {
+      $ionicLoading.show({
+        template: 'Logging in...'
+      });
+
+      $auth.submitLogin($scope.loginData)
+        .then(function (resp) {
+          // handle success response
+          $ionicLoading.hide();
+          $scope.closeLogin();
+        })
+        .catch(function (error) {
+          $ionicLoading.hide();
+          // handle error response
+          $scope.errorMessage = error;
+        });
 
       // Simulate a login delay. Remove this and replace with your login
       // code if using a login system
@@ -33,7 +59,7 @@ angular.module('starter.controllers', [])
   })
 
   .controller('TestController', function($scope) {
-    $scope.gender = ['Male', 'Female'];
+    $scope.gender = ['Female', 'Male'];
     $scope.ageValues = {
       min: 20,
       max: 60,
@@ -48,11 +74,11 @@ angular.module('starter.controllers', [])
     $scope.calculateCooper = function() {
       var person = new Person({
         gender: $scope.data.gender,
-        age: $scope.data.age,
-        distance: $scope.data.distance
+        age: $scope.data.age
       });
+
       person.assessCooper($scope.data.distance);
       $scope.person = person;
       console.log($scope.person)
-    };
+    }
   });
