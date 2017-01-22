@@ -23,3 +23,4 @@ console.log(person.cooperMessage);
 person.assessCooper(2300);
 console.log(person.cooperMessage);
 // > Average
+

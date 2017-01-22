@@ -91,6 +91,12 @@
             <p>Result: {{person.cooperMessage}}</p>
           </div>
         </div>
-
+      <button
+        ng-if="currentUser"
+        ng-controller="PerformanceCtrl"
+        class="button button-full button-calm"
+        ng-click="saveData(person)">
+        Save results
+      </button>
   </ion-content>
 </ion-view>

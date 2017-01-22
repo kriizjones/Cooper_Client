@@ -81,4 +81,65 @@ angular.module('starter.controllers', [])
       $scope.person = person;
       console.log($scope.person)
     }
+  })
+
+.controller('PerformanceCtrl', function($scope, performaceData){
+  $scope.saveData = function(){
+
+  };
+  $scope.retrieveData = function(){
+
+  };
+})
+
+.controller('PerformanceCtrl', function($scope, performaceData, $ionicLoading, $ionicPopup){
+
+  $scope.saveData = function(person){
+    var data = {performance_data: {data: {message: person.cooperMessage}}};
+    $ionicLoading.show({
+      template: 'Saving...'
+    });
+
+
+
+    performaceData.save(data, function(response){
+      $ionicLoading.hide();
+      $scope.showAlert('Sucess', response.message);
+    }, function(error){
+      $ionicLoading.hide();
+      $scope.showAlert('Failure', error.statusText);
+    })
+  }
+
+  .controller('DataCtrl', function($scope, $stateParams){
+    $scope.$on('$ionicView.enter', function () {
+      $scope.savedDataCollection = $stateParams.savedDataCollection;
+    });
   });
+
+  $scope.retrieveData = function(){
+    $ionicLoading.show({
+      template: 'Retrieving data...'
+    });
+    performaceData.query({}, function(response){
+      $state.go('app.data', {savedDataCollection: response.entries});
+      $ionicLoading.hide();
+    }, function(error){
+      $ionicLoading.hide();
+      $scope.showAlert('Failure', error.statusText);
+    })
+  };
+
+  $scope.showAlert = function(message, content) {
+    var alertPopup = $ionicPopup.alert({
+      title: message,
+      template: content
+    });
+    alertPopup.then(function(res) {
+      // Place some action here if needed...
+    });
+  };
+});
+
+
+
